@@ -1,4 +1,5 @@
 {/*API for course data */}
+import courses from "../Database/courses.js";
 import Database from "../Database/index.js";
 export default function CourseRoutes(app) {
     app.get("/api/courses", (req, res)=>{
@@ -16,10 +17,21 @@ export default function CourseRoutes(app) {
         Database.courses = Database.courses.filter((x)=>x.id !== id);
         res.sendStatus(204);
     });
-
-
-
-
-
+    app.put("/api/courses/:id", (req,res)=>{
+        const{id}=req.params;
+        const course = req.body;
+        Database.courses = Database.courses.map((x)=> x._id === parseInt(id) ? {...x, ...course}: x);
+        res.sendStatus(204);
+    })
+    app.get("/api/courses/:id", (req, res) => {
+        const { id } = req.params;
+        const course = Database.courses
+        .find((c) => c._id === id);
+        if (!course) {
+        res.status(404).send("Course not found");
+        return;
+        }
+        res.send(course);
+        });
 
 }
