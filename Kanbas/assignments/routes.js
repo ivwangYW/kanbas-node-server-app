@@ -46,7 +46,37 @@ function AssignmentRoutes(app) {
         }
         
         
-    } );      
+    } );    
+    
+    app.post("/api/courses/:courseId/assignments", (req, res) => {
+        const {courseId} = req.params;
+        const updatedAssignment = req.body;
+        Database.assignments = Database.assignments.map((a)=>{
+            try{
+            
+                if(a._id === updatedAssignment._id) {
+                    return updatedAssignment;
+                }
+                else {
+                    return a;
+                }
+        }
+            catch (error) {
+                console.log("unknow error in server's update new assignment API");
+                return a;
+                
+            }
+        }
+
+        );
+        res.status(200).send(Database.assignments);
+    });
+
+
+    
+
+
+
 
 
 };
