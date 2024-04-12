@@ -16,4 +16,4 @@ CourseRoutes(app);
 AssignmentRoutes(app);
 
 
-app.listen(4000);// listen to the environment variable called PORT for deployment to remote server, or use the local port http://localhost:4000 when running locally. 
+app.listen(process.env.PORT || 4000);// listen to the environment variable called PORT for deployment to remote server, or use the local port http://localhost:4000 when running locally. 
