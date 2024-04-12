@@ -6,7 +6,7 @@ function ModuleRoutes(app) {
         const {cid}=req.params;
         const modules = Database.modules.filter((module)=>module.course === cid);
         if(!modules){
-            res.status(400).send("no cid found for the course")
+            res.status(400).send("no cid found for the course");
             return;
 
         }
@@ -42,6 +42,7 @@ function ModuleRoutes(app) {
         Database.modules[moduleIndex] = {...Database.modules[moduleIndex], ...req.body};
         res.sendStatus(204);
     });
+
 
 }
 export default ModuleRoutes; 
