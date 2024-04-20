@@ -2,9 +2,15 @@
 import courses from "../Database/courses.js";
 import Database from "../Database/index.js";
 import * as dao from "./dao.js";
+// Import ObjectId from the MongoDB library using ESM syntax
+import { ObjectId } from 'mongodb';
+
+
 export default function CourseRoutes(app) {
     app.get("/api/courses", async(req, res)=>{
         const courses = await dao.getAllCourses();
+
+        console.log(`courses got from db: ${courses}`);
         res.send(courses);
     });
     //add new course
@@ -24,13 +30,17 @@ export default function CourseRoutes(app) {
     });
     //update course
     app.put("/api/courses/:id", async (req,res)=>{
+        console.log(`id before`);
         const{id}=req.params;
+        console.log(`id passed to update:  ${id}`);
         const course = req.body;
 
+///////////////////////////////
+       
         //const foundcourseIdDB = await dao.findCourseById(parseInt(id)); //Database.courses = Database.courses.map((x)=> x._id === parseInt(id) ? {...x, ...course}: x);
-        dao.updateCourse(parseInt(id),course);
+        dao.updateCourse(id,course);//parseInt
         res.sendStatus(204);
-    })
+    });
 
 
     //find course by id

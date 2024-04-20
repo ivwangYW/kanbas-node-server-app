@@ -11,12 +11,12 @@ import UserRoutes from "./Users/routes.js";
 import session from "express-session";      // import new server session library
 import "dotenv/config";//import package to use addresses defined in .env
 
-const DATABASE_CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/kanbas';
+const DATABASE_CONNECTION_STRING = /*process.env.DB_CONNECTION_STRING ||*/'mongodb://127.0.0.1:27017/kanbas' ;
 mongoose.connect( DATABASE_CONNECTION_STRING);
 const app = express();  // create new express instance
 app.use(cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL
+    origin: [process.env.FRONTEND_URL, "http://localhost:3000"]
 }
 ));   //app.use(express.json());
 app.use(express.json());   //Configure JSON HTTP body parsing FIRST. Make sure that this appears after the app.use(cors());                          

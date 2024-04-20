@@ -1,18 +1,29 @@
 import model from "./model.js";
-export const createUser = (user) => {
+export const createUser = async(user) => {
     
    
 
     
-    delete user._id // database will create _id for us instead
+    //delete user._id // database will create _id for us instead
    
 
-    model.create(user);
+    await model.create(user);
 };
  
-export const findAllUsers = () => model.find();
+export const findAllUsers = async() => {
+    const documents = await model.find();
+    console.log(`all users found in mongodb in dao.js: ${documents}`);
+    //convert all _id to string type instead of some string some ObjectId.
+    const transformedDocuments = documents.map(doc => {
+        const document = doc.toObject(); // Convert Mongoose document to plain object
+        document._id = document._id.toString(); // Convert ObjectId to string
+        return document;
+    });
+    return transformedDocuments;
+
+};
     
-export const findUserById = (userId) => model.findById(userId);
+export const findUserById = async (userId) => await model.findById(userId);
     
    
        
@@ -20,16 +31,16 @@ export const findUserById = (userId) => model.findById(userId);
     
 
     
-export const findUserByUsername = (username) => model.findOne({ username: username });
+export const findUserByUsername = async(username) => await model.findOne({ username: username });
     
-export const findUserByCredentials = (username, password) => model.findOne({ username, password });
+export const findUserByCredentials = async (username, password) => await model.findOne({ username:username, password:password});
   
    
-export const updateUser = (userId, user) => model.updateOne({ _id: userId }, { $set: user });
+export const updateUser = async (userId, user) =>await model.updateOne({ _id: userId }, { $set: user });
     
        
         
  
-export const deleteUser = (userId) => model.deleteOne({ _id: userId }); 
+export const deleteUser = async (userId) => await model.deleteOne({ _id: userId }); 
    
-export const findUsersByRole = (role) =>model.find({role:role});
+export const findUsersByRole = async (role) =>await model.find({role:role});

@@ -53,18 +53,22 @@ export default function UserRoutes(app) {
      };
 
     const signin = async (req, res) => {
+        console.log("testing signin");
         const { username, password } = req.body;
-        
-
+        console.log(`username got in routes.js -signin is: ${username}`);
+        console.log(`passwork got in routes.js -signin is: ${password}`);
         
         const currentUser = await dao.findUserByCredentials(username, password);
+        console.log(`user found in signing in: ${currentUser}`);
         GlobalCurrentUser = currentUser;//added by myself
-        if (currentUser) {
+        if (currentUser  ){
+            //console.log("currentUser has value in routes.js - signin");
             req.session["currentUser"] = currentUser;
             
             res.json(currentUser);
         }
         else {
+            console.log("else situation entered in routes.js - signin, why?");
             res.sendStatus(401);
         }
         
@@ -78,12 +82,12 @@ export default function UserRoutes(app) {
      };
     const profile = async (req, res) => {
         let currentUser = req.session["currentUser"];
-        GlobalCurrentUser = currentUser;//added by myself
+        //GlobalCurrentUser = currentUser;//added by myself
         if(!currentUser){
             res.sendStatus(401);
             return;
         }
-            res.json(currentUser);
+            res.json(GlobalCurrentUser);
 
 
 
