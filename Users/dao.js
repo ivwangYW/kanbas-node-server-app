@@ -5,10 +5,13 @@ export const createUser = async(user) => {
 
     
     //delete user._id // database will create _id for us instead
-   
-
-    await model.create(user);
+    const newUser = await model.create(user);
+    return newUser;
 };
+
+    
+    
+
  
 export const findAllUsers = async() => {
     const documents = await model.find();

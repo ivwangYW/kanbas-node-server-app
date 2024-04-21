@@ -26,6 +26,7 @@ const sessionOptions = {
     secret:process.env.SESSION_SECRET,    //default session options
     resave: false,
     saveUninitialized: false,
+    cookie: { secure: false } // Set true if using HTTPS    //added by myself
 };
 
 if (process.env.NODE_ENV !== "development") {

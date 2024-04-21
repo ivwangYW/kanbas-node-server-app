@@ -1,10 +1,16 @@
 import * as dao from "./dao.js";
 //let currentUser = null;
 
-let GlobalCurrentUser = null;
+
 export default function UserRoutes(app) {
     const createUser = async (req, res) => {
-        const user= await dao.createUser(req.body);
+        
+        //add a new id to the new user.
+        const newUser = {
+            ...req.body, 
+            _id:new Date().getTime().toString()
+        };
+        const user= await dao.createUser(newUser);
         res.json(user);
         };
             
@@ -33,21 +39,26 @@ export default function UserRoutes(app) {
      };
     const updateUser = async (req, res) => {
         
-            const { userId } = req.params;
+            const userId = req.session["currentUser"]._id;
             const status = await dao.updateUser(userId, req.body);
             const currentUser = await dao.findUserById(userId);
-            GlobalCurrentUser = currentUser;//added by myself
+            req.session["currentUser"]= currentUser;//added by myself
             res.json(status);
             
     };
     const signup = async (req, res) => {
+        console.log("signup routes.js");
        const user = await dao.findUserByUsername(req.body.username);
        if (user) {
         res.status(400).json({message:"Username already taken"});
        }
+       const newUser = {
+        ...req.body, 
+        _id:new Date().getTime().toString()
+    };
 
-       const currentUser = await dao.createUser(req.body);
-       GlobalCurrentUser = currentUser;//added by myself
+       const currentUser = await dao.createUser(newUser);
+       
        req.session["currentUser"] = currentUser;
        res.json(currentUser);
      };
@@ -60,11 +71,11 @@ export default function UserRoutes(app) {
         
         const currentUser = await dao.findUserByCredentials(username, password);
         console.log(`user found in signing in: ${currentUser}`);
-        GlobalCurrentUser = currentUser;//added by myself
+        
         if (currentUser  ){
             //console.log("currentUser has value in routes.js - signin");
             req.session["currentUser"] = currentUser;
-            
+            //console.log("processing currentUser")
             res.json(currentUser);
         }
         else {
@@ -81,13 +92,15 @@ export default function UserRoutes(app) {
 
      };
     const profile = async (req, res) => {
+        //console.log("entered routes.js-profile");
+       
         let currentUser = req.session["currentUser"];
         //GlobalCurrentUser = currentUser;//added by myself
         if(!currentUser){
             res.sendStatus(401);
             return;
         }
-            res.json(GlobalCurrentUser);
+            res.json(currentUser);
 
 
 
