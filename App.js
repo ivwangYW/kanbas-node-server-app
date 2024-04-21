@@ -11,7 +11,7 @@ import UserRoutes from "./Users/routes.js";
 import session from "express-session";      // import new server session library
 import "dotenv/config";//import package to use addresses defined in .env
 
-const DATABASE_CONNECTION_STRING = /*process.env.DB_CONNECTION_STRING ||*/'mongodb://127.0.0.1:27017/kanbas' ;
+const DATABASE_CONNECTION_STRING = process.env.DB_CONNECTION_STRING ||'mongodb://127.0.0.1:27017/kanbas' ;
 mongoose.connect( DATABASE_CONNECTION_STRING);
 const app = express();  // create new express instance
 app.use(cors({
