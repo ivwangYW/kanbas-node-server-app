@@ -11,7 +11,7 @@ problems: {
 _id: String,
 name: String,
 description: String,
-options: [String], 
+options: [option], 
 answer:String,
 quizId:String},
 dateDue: String,
